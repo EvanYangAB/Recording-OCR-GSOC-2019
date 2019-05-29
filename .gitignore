@@ -1,0 +1,7 @@
+*.json
+*.zip
+train2014
+samples
+__pycache__
+.ipynb_checkpoints
+*.h5
