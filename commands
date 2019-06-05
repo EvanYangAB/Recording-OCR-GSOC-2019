@@ -1,0 +1,4 @@
+# useful commands
+singularity pull shub://EvanYangAB/Recording-OCR-GSOC-2019
+singularity shell -e -H `pwd` Recording-OCR-GSOC-2019_latest.sif
+
