@@ -122,7 +122,7 @@ class ImageDataset(utils.Dataset):
     shapes (triangles, squares, circles) placed randomly on a blank surface.
     The images are generated on the fly. No file access required.
     """
-    def __init__(self, ann_path, dataDir):
+    def __init__(self, ann_path, dataDir, train):
         super(ImageDataset, self).__init__()
         # link annotation
         self.ct = coco_text.COCO_Text(ann_path)
