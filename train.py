@@ -227,7 +227,7 @@ elif init_with == "coco":
 elif init_with == "last":
     # Load the last model you trained and continue training
     model.load_weights(model.find_last(), by_name=True)
-
+print("weights loaded")
 
 # ## Training
 # 
@@ -247,7 +247,7 @@ model.train(dataset_train, dataset_val,
             learning_rate=config.LEARNING_RATE, 
             epochs=1000, 
             layers='heads')
-
+print("finished training head layers")
 
 # In[ ]:
 
