@@ -245,7 +245,7 @@ elif init_with == "last":
 # which layers to train by name pattern.
 model.train(dataset_train, dataset_val, 
             learning_rate=config.LEARNING_RATE, 
-            epochs=1, 
+            epochs=1000, 
             layers='heads')
 
 
@@ -258,7 +258,7 @@ model.train(dataset_train, dataset_val,
 # train by name pattern.
 model.train(dataset_train, dataset_val, 
             learning_rate=config.LEARNING_RATE / 10,
-            epochs=2, 
+            epochs=200, 
             layers="all")
 
 
