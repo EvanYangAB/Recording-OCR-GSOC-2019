@@ -15,6 +15,7 @@ exec /bin/bash /code/rawr.sh "$@"
 %post  
 echo "This section happens once after bootstrap to build the image."  
 mkdir -p /code  
+apt-get update
 apt-get install python3
 echo "RoooAAAAR" >> /code/rawr.sh
 chmod u+x /code/rawr.sh  
