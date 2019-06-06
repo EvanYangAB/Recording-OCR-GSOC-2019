@@ -27,16 +27,16 @@ From: nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
  #The path to the image is $SINGULARITY_ROOTFS
 
 %post
-  # post-setup script
+  	#Post setup script
 
-  # load environment variables
-  . /environment
+	#Load environment variables
+	. /environment
 
-  #Default mount paths
-  mkdir /scratch /data /shared /fastdata
+	#Default mount paths
+	mkdir /scratch /data /shared /fastdata
 
-  #Nvidia Library mount paths
-  mkdir /nvlib /nvbin
+	#Nvidia Library mount paths
+	mkdir /nvlib /nvbin
 
   # use bash as default shell
   echo 'SHELL=/bin/bash' >> /environment
