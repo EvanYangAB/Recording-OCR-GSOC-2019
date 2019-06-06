@@ -1,10 +1,27 @@
 Bootstrap: docker
-From: tensorflow/tensorflow:2.0.0a0-gpu-py3
+From: nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
 
 %environment
-  # use bash as default shell
-  SHELL=/bin/bash
-  export SHELL
+
+	#Environment variables
+
+	#Use bash as default shell
+	SHELL=/bin/bash
+
+	#Add nvidia driver paths
+	PATH="/nvbin:$PATH"
+	LD_LIBRARY_PATH="/nvlib;$LD_LIBRARY_PATH"
+
+	#Add CUDA paths
+	CPATH="/usr/local/cuda/include:$CPATH"
+	PATH="/usr/local/cuda/bin:$PATH"
+	LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
+	CUDA_HOME="/usr/local/cuda"
+
+	#Add Anaconda path
+	PATH="/usr/local/anaconda3-4.2.0/bin:$PATH"
+
+	export PATH LD_LIBRARY_PATH CPATH CUDA_HOME
 
 %setup
   # runs on host - the path to the image is $SINGULARITY_ROOTFS
