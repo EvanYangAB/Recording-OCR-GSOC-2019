@@ -29,8 +29,6 @@ From: nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
 %post
   	#Post setup script
 
-  # use bash as default shell
-  echo 'SHELL=/bin/bash' >> /environment
 
   #Creates a build directory
   mkdir build
