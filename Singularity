@@ -30,7 +30,7 @@ From: nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
   	#Post setup script
 
 	#Load environment variables
-	. /environment
+	# . /environment
 
 	#Default mount paths
 	mkdir /scratch /data /shared /fastdata
