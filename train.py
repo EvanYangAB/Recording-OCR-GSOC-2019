@@ -76,10 +76,10 @@ class ImageConfig(Config):
     TRAIN_ROIS_PER_IMAGE = 32
 
     # Use a small epoch since the data is simple
-    STEPS_PER_EPOCH = 100
+    STEPS_PER_EPOCH = 1000
 
     # use small validation steps since the epoch is small
-    VALIDATION_STEPS = 5
+    VALIDATION_STEPS = 50
     
 config = ImageConfig()
 config.display()

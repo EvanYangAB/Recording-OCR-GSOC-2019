@@ -4,4 +4,7 @@ singularity shell -e -H `pwd` Recording-OCR-GSOC-2019_latest.sif
 
 python3 train.py cocotext.v2.json train2014/ val2014/
 
+srun -p gpu -C gpuk40 --gres=gpu:1 --pty bash
 singularity exec -B `pwd`:/home/yxy1031/yxy1031gallinahome/Recording-OCR-GSOC-2019/ Recording-OCR-GSOC-2019_latest.sif python3 train.py cocotext.v2.json train2014/ val2014/Recording-OCR-GSOC-2019_late
+
+/yxy1031gallinahome/Recording-OCR-GSOC-2019/logs
