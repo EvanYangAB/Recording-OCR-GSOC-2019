@@ -40,13 +40,13 @@ From: tensorflow/tensorflow:2.0.0a0-gpu-py3
   pip install cython
   pip install matplotlib
   pip install scikit-image
-  pip install tensorflow>=1.3.0
+  TF_PYTHON_URL="https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.3.0-cp35-cp35m-linux_x86_64.whl"
+  pip install --ignore-installed --upgrade $TF_PYTHON_URL
   pip install keras>=2.0.8
-  pip install opencv-python
+  # pip install opencv-python
   pip install h5py
   pip install imgaug
   pip install IPython[all]
-  pip install Pillow
 
 %runscript
   # executes with the singularity run command

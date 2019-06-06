@@ -1,8 +1,10 @@
 *.json
 *.zip
 train2014
+val2014
 samples
 __pycache__
 *.ipynb_checkpoints
 *.ipynb
 *.h5
+logs
