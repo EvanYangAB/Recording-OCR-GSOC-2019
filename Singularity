@@ -30,9 +30,6 @@ From: nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
   	#Post setup script
 
 
-  #Creates a build directory
-  mkdir build
-  cd build
 
   # additional packages
   apt-get update
