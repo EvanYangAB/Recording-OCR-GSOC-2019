@@ -29,9 +29,6 @@ From: nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
 %post
   # post-setup script
 
-  # make environment file executable
-  chmod +x /environment
-
   # load environment variables
   . /environment
 
