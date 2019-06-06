@@ -28,17 +28,18 @@ From: nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
 
 %post
   # post-setup script
-  #Default mount paths
-  mkdir /scratch /data /shared /fastdata
-
-  #Nvidia Library mount paths
-  mkdir /nvlib /nvbin
 
   # make environment file executable
   chmod +x /environment
 
   # load environment variables
   . /environment
+
+  #Default mount paths
+  mkdir /scratch /data /shared /fastdata
+
+  #Nvidia Library mount paths
+  mkdir /nvlib /nvbin
 
   # use bash as default shell
   echo 'SHELL=/bin/bash' >> /environment
