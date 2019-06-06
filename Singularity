@@ -24,10 +24,18 @@ From: nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
 	export PATH LD_LIBRARY_PATH CPATH CUDA_HOME
 
 %setup
-  # runs on host - the path to the image is $SINGULARITY_ROOTFS
+ #The path to the image is $SINGULARITY_ROOTFS
 
 %post
   # post-setup script
+  #Default mount paths
+  mkdir /scratch /data /shared /fastdata
+
+  #Nvidia Library mount paths
+  mkdir /nvlib /nvbin
+
+  # make environment file executable
+  chmod +x /environment
 
   # load environment variables
   . /environment
@@ -35,11 +43,9 @@ From: nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
   # use bash as default shell
   echo 'SHELL=/bin/bash' >> /environment
 
-  # make environment file executable
-  chmod +x /environment
-
-  # default mount paths
-  mkdir /scratch /data 
+  #Creates a build directory
+  mkdir build
+  cd build
 
   # additional packages
   apt-get update
