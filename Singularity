@@ -1,13 +1,28 @@
 Bootstrap: docker
-From: ubuntu:latest
+From: tensorflow/tensorflow:2.0.0a0-gpu-py3
+
+%environment
+  # use bash as default shell
+  SHELL=/bin/bash
+  export SHELL
 
 %setup
- #The path to the image is $SINGULARITY_ROOTFS
+  # runs on host - the path to the image is $SINGULARITY_ROOTFS
 
 %post
-  	#Post setup script
+  # post-setup script
 
+  # load environment variables
+  . /environment
 
+  # use bash as default shell
+  echo 'SHELL=/bin/bash' >> /environment
+
+  # make environment file executable
+  chmod +x /environment
+
+  # default mount paths
+  mkdir /scratch /data 
 
   # additional packages
   apt-get update
@@ -27,10 +42,11 @@ From: ubuntu:latest
   pip install scikit-image
   pip install tensorflow-gpu
   pip install keras>=2.0.8
-  # pip install opencv-python
+  pip install opencv-python
   pip install h5py
   pip install imgaug
   pip install IPython[all]
+  pip install Pillow
 
 %runscript
   # executes with the singularity run command
