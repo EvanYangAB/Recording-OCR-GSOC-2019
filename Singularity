@@ -9,7 +9,7 @@ From: ubuntu:latest
 
 
   # additional packages
-  apt-get update
+  RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
   apt-get install -y python3
   apt-get install -y libsm6 libxext6
   pip install selenium
