@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: tensorflow/tensorflow:2.0.0a0-gpu-py3
+From: tensorflow/tensorflow:1.13.1-gpu-py3
 
 %environment
   # use bash as default shell
@@ -40,7 +40,6 @@ From: tensorflow/tensorflow:2.0.0a0-gpu-py3
   pip install cython
   pip install matplotlib
   pip install scikit-image
-  pip install tensorflow-gpu
   pip install keras>=2.0.8
   pip install opencv-python
   pip install h5py
