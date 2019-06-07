@@ -1,10 +1,13 @@
 # useful commands
-singularity pull shub://EvanYangAB/Recording-OCR-GSOC-2019
+# singularity pull shub://EvanYangAB/Recording-OCR-GSOC-2019
+singularity pull shub://EvanYangAB/Recording-OCR-GSOC-2019:cuda
 singularity shell -e -H `pwd` Recording-OCR-GSOC-2019_latest.sif
 
 python3 train.py cocotext.v2.json train2014/ val2014/
 
 srun -p gpu -C gpuk40 --gres=gpu:1 --pty bash
-singularity exec -B `pwd`:/home/yxy1031/yxy1031gallinahome/Recording-OCR-GSOC-2019/ Recording-OCR-GSOC-2019_latest.sif python3 train.py cocotext.v2.json train2014/ val2014/Recording-OCR-GSOC-2019_late
+singularity exec -B `pwd`:/home/yxy1031/yxy1031gallinahome/Recording-OCR-GSOC-2019/ Recording-OCR-GSOC-2019_cuda.sif python3 train.py cocotext.v2.json train2014/ val2014/
 
 /yxy1031gallinahome/Recording-OCR-GSOC-2019/logs
+
+srun --x11 -p gpup100 --exclusive --gres=gpu:1 -n 1 -c 2 --time=1:00:00 --mem=5gb --pty /bin/bash
