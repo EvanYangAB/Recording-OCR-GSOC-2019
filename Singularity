@@ -10,7 +10,8 @@ From: paddlepaddle/deep_speech:latest-gpu
 
   # additional packages
   apt-get update
-  apt-get install python3
+  apt-get install -y python3
+  apt-get install -y libsm6 libxext6
   pip install selenium
   pip install moviepy
   pip install lmdb
