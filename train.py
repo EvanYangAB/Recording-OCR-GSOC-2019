@@ -130,8 +130,10 @@ class ImageDataset(utils.Dataset):
         self.dataDir = dataDir
         self.add_class("cocotext", 1, "text")
         if train:
+            print("train")
             db = self.ct.train
         else:
+            print("val")
             db = self.ct.val
         imgIds = self.ct.getImgIds(imgIds=db, 
                     catIds=[('legibility','legible')])
@@ -243,9 +245,9 @@ print("weights loaded")
 # Passing layers="heads" freezes all layers except the head
 # layers. You can also pass a regular expression to select
 # which layers to train by name pattern.
-model.train(dataset_train, dataset_val, 
+model.train(dataset_train, dataset_train, 
             learning_rate=config.LEARNING_RATE, 
-            epochs=1000, 
+            epochs=1, 
             layers='heads')
 print("finished training head layers")
 
@@ -256,7 +258,7 @@ print("finished training head layers")
 # Passing layers="all" trains all layers. You can also 
 # pass a regular expression to select which layers to
 # train by name pattern.
-model.train(dataset_train, dataset_val, 
+model.train(dataset_train, dataset_train, 
             learning_rate=config.LEARNING_RATE / 10,
             epochs=200, 
             layers="all")
@@ -268,5 +270,5 @@ model.train(dataset_train, dataset_val,
 # Save weights
 # Typically not needed because callbacks save after every epoch
 # Uncomment to save manually
-model_path = os.path.join(MODEL_DIR, "mask_rcnn_shapes.h5")
+model_path = os.path.join(MODEL_DIR, "mask_rcnn_cocotext.h5")
 model.keras_model.save_weights(model_path)

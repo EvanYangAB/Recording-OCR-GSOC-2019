@@ -1,10 +1,5 @@
 Bootstrap: docker
-From: tensorflow/tensorflow:1.13.1-gpu-py3
-
-%environment
-  # use bash as default shell
-  SHELL=/bin/bash
-  export SHELL
+From: paddlepaddle/deep_speech:latest-gpu
 
 %setup
   # runs on host - the path to the image is $SINGULARITY_ROOTFS
@@ -12,17 +7,6 @@ From: tensorflow/tensorflow:1.13.1-gpu-py3
 %post
   # post-setup script
 
-  # load environment variables
-  . /environment
-
-  # use bash as default shell
-  echo 'SHELL=/bin/bash' >> /environment
-
-  # make environment file executable
-  chmod +x /environment
-
-  # default mount paths
-  mkdir /scratch /data 
 
   # additional packages
   apt-get update
@@ -45,7 +29,6 @@ From: tensorflow/tensorflow:1.13.1-gpu-py3
   pip install h5py
   pip install imgaug
   pip install IPython[all]
-  pip install Pillow
 
 %runscript
   # executes with the singularity run command
