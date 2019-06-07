@@ -12,23 +12,23 @@ From: paddlepaddle/deep_speech:latest-gpu
   apt-get update
   apt-get install -y python3
   apt-get install -y libsm6 libxext6
-  pip install selenium
-  pip install moviepy
-  pip install lmdb
-  pip install opencv-contrib-python
-  pip install cryptography
+  pip3 install selenium
+  pip3 install moviepy
+  pip3 install lmdb
+  pip3 install opencv-contrib-python
+  pip3 install cryptography
 
-  pip install numpy
-  pip install scipy
-  pip install Pillow
-  pip install cython
-  pip install matplotlib
-  pip install scikit-image
-  pip install keras>=2.0.8
-  pip install opencv-python
-  pip install h5py
-  pip install imgaug
-  pip install IPython[all]
+  pip3 install numpy
+  pip3 install scipy
+  pip3 install Pillow
+  pip3 install cython
+  pip3 install matplotlib
+  pip3 install scikit-image
+  pip3 install keras>=2.0.8
+  pip3 install opencv-python
+  pip3 install h5py
+  pip3 install imgaug
+  pip3 install IPython[all]
 
 %runscript
   # executes with the singularity run command

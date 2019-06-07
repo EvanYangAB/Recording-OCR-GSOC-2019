@@ -76,7 +76,7 @@ class ImageConfig(Config):
     TRAIN_ROIS_PER_IMAGE = 32
 
     # Use a small epoch since the data is simple
-    STEPS_PER_EPOCH = 100
+    STEPS_PER_EPOCH = 1000
 
     # use small validation steps since the epoch is small
     VALIDATION_STEPS = 5
@@ -260,7 +260,7 @@ print("finished training head layers")
 # train by name pattern.
 model.train(dataset_train, dataset_train, 
             learning_rate=config.LEARNING_RATE / 10,
-            epochs=20, 
+            epochs=28, 
             layers="all")
 
 
