@@ -38,6 +38,7 @@ From: nvidia/cuda:9.1-cudnn7-devel-ubuntu16.04
   #Updating and getting required packages
   apt-get update
   apt-get install -y wget git vim python python3
+  apt-get install -y libsm6 libxext6 libxrender-dev
 
   #Creates a build directory
   mkdir build
