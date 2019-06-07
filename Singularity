@@ -9,10 +9,10 @@ From: ubuntu:latest
 
 
   # additional packages
-  apt-get install -y --no-install-recommends apt-utils
   apt-get update 
-  apt-get install -y python3
   apt-get install -y libsm6 libxext6
+  apt-get install -y python-tk
+  apt-get install -y python3
   pip install selenium
   pip install moviepy
   pip install lmdb
