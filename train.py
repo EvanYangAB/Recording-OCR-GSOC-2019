@@ -58,7 +58,7 @@ class ImageConfig(Config):
     # Train on 1 GPU and 8 images per GPU. We can put multiple images on each
     # GPU because the images are small. Batch size is 8 (GPUs * images/GPU).
     GPU_COUNT = 1
-    IMAGES_PER_GPU = 2
+    IMAGES_PER_GPU = 1
 
     # Number of classes (including background)
     NUM_CLASSES = 1 + 1  # background + text
@@ -76,11 +76,11 @@ class ImageConfig(Config):
     TRAIN_ROIS_PER_IMAGE = 32
 
     # Use a small epoch since the data is simple
-    STEPS_PER_EPOCH = 1000
+    STEPS_PER_EPOCH = 100
 
     # use small validation steps since the epoch is small
-    VALIDATION_STEPS = 50
-    
+    VALIDATION_STEPS = 5
+
 config = ImageConfig()
 config.display()
 
@@ -215,7 +215,7 @@ model = modellib.MaskRCNN(mode="training", config=config,
 
 
 # Which weights to start with?
-init_with = "coco"  # imagenet, coco, or last
+init_with = "last"  # imagenet, coco, or last
 
 if init_with == "imagenet":
     model.load_weights(model.get_imagenet_weights(), by_name=True)
@@ -247,7 +247,7 @@ print("weights loaded")
 # which layers to train by name pattern.
 model.train(dataset_train, dataset_train, 
             learning_rate=config.LEARNING_RATE, 
-            epochs=1, 
+            epochs=100, 
             layers='heads')
 print("finished training head layers")
 
@@ -260,7 +260,7 @@ print("finished training head layers")
 # train by name pattern.
 model.train(dataset_train, dataset_train, 
             learning_rate=config.LEARNING_RATE / 10,
-            epochs=200, 
+            epochs=20, 
             layers="all")
 
 
