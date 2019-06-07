@@ -9,7 +9,9 @@ From: ubuntu:latest
 
 
   # additional packages
-  RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
+  ENV DEBIAN_FRONTEND noninteractive
+  apt-get update 
+  apt-get install -y --no-install-recommends apt-utils
   apt-get install -y python3
   apt-get install -y libsm6 libxext6
   pip install selenium
@@ -30,6 +32,8 @@ From: ubuntu:latest
   pip install h5py
   pip install imgaug
   pip install IPython[all]
+
+  ENV DEBIAN_FRONTEND teletype
 
 %runscript
   # executes with the singularity run command
