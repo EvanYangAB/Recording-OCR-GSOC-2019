@@ -1,0 +1,4 @@
+Bootstrap: shub
+From: shub://schanzel/singularity-tensorflow-keras-py3
+
+%post
