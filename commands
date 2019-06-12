@@ -11,3 +11,5 @@ singularity exec -B `pwd`:/home/yxy1031/yxy1031gallinahome/Recording-OCR-GSOC-20
 /yxy1031gallinahome/Recording-OCR-GSOC-2019/logs
 
 srun --x11 -p gpup100 --exclusive --gres=gpu:1 -n 1 -c 2 --time=1:00:00 --mem=5gb --pty /bin/bash
+
+PATH="$PATH:/home/yxy1031/yxy1031gallinahome/Recording-OCR-GSOC-2019/.local/bin"

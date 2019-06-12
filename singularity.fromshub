@@ -2,13 +2,15 @@ Bootstrap: shub
 From: shub://schanzel/singularity-tensorflow-keras-py3
 
 %post
+	apt-get install -y libsm6 libxext6 libxrender-dev
+	pip install tensorflow==1.5
 	pip install keras -y
   	pip install scipy
   	pip install Pillow
   	pip install cython
   	pip install matplotlib
   	pip install scikit-image
-  	pip install opencv-python
+  	pip install opencv-python==3.3.0.9 --user
   	pip install h5py
   	pip install imgaug
   	pip install IPython[all]
