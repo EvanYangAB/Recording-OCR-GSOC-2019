@@ -1,0 +1,35 @@
+from mrcnn.config import Config
+from mrcnn import utils
+import mrcnn.model as modellib
+from mrcnn import visualize
+from mrcnn.model import log
+import numpy as np
+import cv2
+from tesseract_wrapper import image_to_string
+
+# mask should be inthe form of [[x,y],[x,y],[x,y]]
+def filter_image(img, mask):
+    fter = np.zeros((img.shape[0], img.shape[1]))
+    cv2.fillConvexPoly(fter, mask, 1)
+    fter = fter.astype(np.bool)
+    out = np.zeros_like(img)
+    out[fter] = img[fter]
+    return out
+
+def merge_texts(texts):
+    #TODO
+
+# file should be a path to a 1s or few seconds long video
+def video_to_text(file, model):
+    results = model.detect([original_image], verbose=1)
+
+    r = results[0]
+    texts = []
+    for mask in r['mask']:
+        filtered_img = filter_image(original_image, mask)
+        text.append(image_to_string(filtered_img))
+
+    text = merge_texts(texts)
+    # TODO: ASR text and merge
+
+    return text
