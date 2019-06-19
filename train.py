@@ -1,14 +1,5 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-# # Mask R-CNN - Train on Shapes Dataset
-# 
-# 
-# This notebook shows how to train Mask R-CNN on your own dataset. To keep things simple we use a synthetic dataset of shapes (squares, triangles, and circles) which enables fast training. You'd still need a GPU, though, because the network backbone is a Resnet101, which would be too slow to train on a CPU. On a GPU, you can start to get okay-ish results in a few minutes, and good results in less than an hour.
-# 
-# The code of the *Shapes* dataset is included below. It generates images on the fly, so it doesn't require downloading any data. And it can generate images of any size, so we pick a small image size to train faster. 
-
-
 import os
 import sys
 import random
@@ -44,27 +35,23 @@ if not os.path.exists(COCO_MODEL_PATH):
 
 # ## Configurations
 
-# In[55]:
-
 
 class ImageConfig(Config):
-    """Configuration for training on the toy shapes dataset.
-    Derives from the base Config class and overrides values specific
-    to the toy shapes dataset.
+    """
+    Configuration for training on the coco image dataset
+
     """
     # Give the configuration a recognizable name
     NAME = "cocotext"
 
-    # Train on 1 GPU and 8 images per GPU. We can put multiple images on each
-    # GPU because the images are small. Batch size is 8 (GPUs * images/GPU).
+    # Train on 1 GPU and 8 images per GPU. One image per gpu uses around 7gb
+    # GPU RAM. Batch size is 8 (GPUs * images/GPU).
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
 
     # Number of classes (including background)
     NUM_CLASSES = 1 + 1  # background + text
 
-    # Use small images for faster training. Set the limits of the small side
-    # the large side, and that determines the image shape.
     IMAGE_MIN_DIM = 128
     IMAGE_MAX_DIM = 1280
 
@@ -85,35 +72,7 @@ config = ImageConfig()
 config.display()
 
 
-# ## Notebook Preferences
-
-# In[56]:
-
-
-def get_ax(rows=1, cols=1, size=8):
-    """Return a Matplotlib Axes array to be used in
-    all visualizations in the notebook. Provide a
-    central point to control graph sizes.
-    
-    Change the default size attribute to control the size
-    of rendered images
-    """
-    _, ax = plt.subplots(rows, cols, figsize=(size*cols, size*rows))
-    return ax
-
-
 # ## Dataset
-# 
-# Create a synthetic dataset
-# 
-# Extend the Dataset class and add a method to load the shapes dataset, `load_shapes()`, and override the following methods:
-# 
-# * load_image()
-# * load_mask()
-# * image_reference()
-
-# In[80]:
-
 
 import coco_text
 
@@ -211,10 +170,7 @@ model = modellib.MaskRCNN(mode="training", config=config,
                           model_dir=MODEL_DIR)
 
 
-# In[8]:
-
-
-# Which weights to start with?
+# Start weights
 init_with = "coco"  # imagenet, coco, or last
 
 if init_with == "imagenet":
@@ -232,43 +188,25 @@ elif init_with == "last":
 print("weights loaded")
 
 # ## Training
-# 
-# Train in two stages:
-# 1. Only the heads. Here we're freezing all the backbone layers and training only the randomly initialized layers (i.e. the ones that we didn't use pre-trained weights from MS COCO). To train only the head layers, pass `layers='heads'` to the `train()` function.
-# 
-# 2. Fine-tune all layers. For this simple example it's not necessary, but we're including it to show the process. Simply pass `layers="all` to train all layers.
-
-# In[10]:
-
 
 # Train the head branches
 # Passing layers="heads" freezes all layers except the head
-# layers. You can also pass a regular expression to select
-# which layers to train by name pattern.
+# layers. 
 model.train(dataset_train, dataset_train, 
             learning_rate=config.LEARNING_RATE, 
             epochs=100, 
             layers='heads')
 print("finished training head layers")
 
-# In[ ]:
-
-
 # Fine tune all layers
-# Passing layers="all" trains all layers. You can also 
-# pass a regular expression to select which layers to
-# train by name pattern.
+# Passing layers="all" trains all layers.
 model.train(dataset_train, dataset_train, 
             learning_rate=config.LEARNING_RATE / 10,
             epochs=28, 
             layers="all")
 
 
-# In[ ]:
-
-
 # Save weights
-# Typically not needed because callbacks save after every epoch
-# Uncomment to save manually
+
 model_path = os.path.join(MODEL_DIR, "mask_rcnn_cocotext.h5")
 model.keras_model.save_weights(model_path)
