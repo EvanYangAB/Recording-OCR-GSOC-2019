@@ -17,18 +17,33 @@ def filter_image(img, mask):
     return out
 
 def merge_texts(texts):
-    #TODO
+    # TODO
 
 # file should be a path to a 1s or few seconds long video
-def video_to_text(file, model):
-    results = model.detect([original_image], verbose=1)
-
-    r = results[0]
+def video_to_text(file, model， lang):
+    vc = cv2.VideoCapture(file)
     texts = []
-    for mask in r['mask']:
-        filtered_img = filter_image(original_image, mask)
-        text.append(image_to_string(filtered_img))
+    if vc.isOpened():
+        rval , frame = vc.read()
+    else:
+        # TODO exception
 
+    # iter all the frames
+    while rval:
+        rval, frame = vc.read()
+
+        results = model.detect([frame], verbose=1)
+
+        r = results[0]
+        
+        for mask in r['mask']:
+            filtered_img = filter_image(original_image, mask)
+            text.append(image_to_string(filtered_img, lang))
+        
+        c = c + 1
+        cv2.waitKey(1)
+    vc.release()
+    
     text = merge_texts(texts)
     # TODO: ASR text and merge
 
