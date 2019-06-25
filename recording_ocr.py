@@ -16,13 +16,33 @@ def filter_image(img, mask):
     fter = fter.astype(np.bool)
     out = np.zeros_like(img)
     out[fter] = img[fter]
-    return out
+
+    # calculate centorid of masked area
+    ave_x = 0
+    ave_y = 0
+    for (x, y) in mask:
+        ave_x += x
+        ave_y += y
+    ave_x = ave_x / len(mask)
+    ave_y = ave_y / len(mask)
+
+    return out, (ave_x, ave_y)
 
 def merge_texts(texts):
+    # each element in the array in is in the form of
+    # text, coor, frame#
+
+
+    # group text 
+    # each text comsumes (removes) all text that is 
+    # 1, in consecutive frames
+    # 2, similar in context and location
+    while 
+
     # TODO
 
 # file should be a path to a 1s or few seconds long video
-def video_to_text(file, model， lang):
+def video_to_text(file, model，lang):
     vc = cv2.VideoCapture(file)
     texts = []
     if vc.isOpened():
@@ -33,6 +53,7 @@ def video_to_text(file, model， lang):
     # iter all the frames
     while rval:
         # read one frame
+        text[c] = []
         rval, frame = vc.read()
         # grab results from the detection model
         results = model.detect([frame], verbose=1)
@@ -40,8 +61,10 @@ def video_to_text(file, model， lang):
         # iter through each mask for this frame and apply
         # ocr
         for mask in r['mask']:
-            filtered_img = filter_image(original_image, mask)
-            text.append(image_to_string(filtered_img, lang))
+            filtered_img, center = filter_image(original_image, mask)
+            # (text, center coordinate, frame #, indicator)
+            # indicator is reserved for merging
+            texts[c].append((image_to_string(filtered_img, lang), center, True))
 
         c = c + 1
         cv2.waitKey(1)
