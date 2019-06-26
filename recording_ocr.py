@@ -17,7 +17,7 @@ def filter_image(img, mask):
     out = np.zeros_like(img)
     out[fter] = img[fter]
 
-    # calculate centorid of masked area
+    # calculate centroid of masked area
     ave_x = 0
     ave_y = 0
     for (x, y) in mask:
@@ -28,16 +28,12 @@ def filter_image(img, mask):
 
     return out, (ave_x, ave_y)
 
+# each element in the array in is in the form of
+# represents a frame, each result in the frame is 
+# in the form of: 
+# (text, center coor), text id
 def merge_texts(texts):
-    # each element in the array in is in the form of
-    # text, coor, frame#
 
-
-    # group text 
-    # each text comsumes (removes) all text that is 
-    # 1, in consecutive frames
-    # 2, similar in context and location
-    while 
 
     # TODO
 
@@ -50,21 +46,41 @@ def video_to_text(file, model，lang):
     else:
         # TODO exception
 
+    # used this for accessing merged result
+    text_id_incre = 0
     # iter all the frames
     while rval:
         # read one frame
-        text[c] = []
+        texts.append([])
         rval, frame = vc.read()
         # grab results from the detection model
         results = model.detect([frame], verbose=1)
         r = results[0]
         # iter through each mask for this frame and apply
         # ocr
+        identified = -1
         for mask in r['mask']:
             filtered_img, center = filter_image(original_image, mask)
+            text = (image_to_string(filtered_img, lang))
             # (text, center coordinate, frame #, indicator)
             # indicator is reserved for merging
-            texts[c].append((image_to_string(filtered_img, lang), center, True))
+            if c is not 0:
+                # compare to the result in the previous frame, and merge
+                # put texts that should be the same together
+
+                # result is in the from of (text, center coor)
+                # get the first one that has similarity score greater than
+                # THREASHOLD
+                for result, text_id in texts[c-1]:
+                    if similarity(result, (text, center)) > THREASHOLD:
+                        identified = text_id
+                        break
+
+                if identified = -1:
+                    identified = text_id_incre
+                    text_id_incre += 1
+
+                texts[c].append(((text, center), identified))
 
         c = c + 1
         cv2.waitKey(1)
