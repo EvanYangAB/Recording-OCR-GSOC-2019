@@ -28,12 +28,25 @@ def filter_image(img, mask):
 
     return out, (ave_x, ave_y)
 
+def merge_text(text_array):
+    pass
+
 # each element in the array in is in the form of
 # represents a frame, each result in the frame is 
 # in the form of: 
 # (text, center coor), text id
-def merge_texts(texts):
-
+def merge_texts_array(texts, num):
+    merged = [{"all_text" : [], 'frame_ids': []}] * num
+    text_arr = [(frame_id, text_id, text) for (frame, frame_id) in enumerate(texts) for (text, center_coor), text_id in frame]
+    for frame_id, text_id, text in text_arr:
+        merged[text_id]['all_text'].append(text)
+        merged[text_id]['frame_id'].append(frame_id)
+    for text in merged:
+        text['text'] = merge_text(text['all_text'])
+        text['frames'] = (min(text['frame_id']), max(text['frame_id']))
+        del text['all_text']
+        del text['frame_id']
+    return text
 
     # TODO
 
@@ -86,7 +99,7 @@ def video_to_text(file, model，lang):
         cv2.waitKey(1)
     vc.release()
     # call merge text
-    text = merge_texts(texts)
+    text = merge_texts_array(texts, text_id_incre)
     # TODO: ASR text and merge
 
     return text
