@@ -5,7 +5,11 @@ from mrcnn import visualize
 from mrcnn.model import log
 import numpy as np
 import cv2
+from difflib import SequenceMatcher
 from tesseract_wrapper import image_to_string
+
+arr = []
+THREASHOLD = 0.8
 
 # mask should be inthe form of [[x,y],[x,y],[x,y]]
 # cover the background of the input
@@ -28,8 +32,63 @@ def filter_image(img, mask):
 
     return out, (ave_x, ave_y)
 
+
+# occurance in the length of t1
+def merge(t1, t2, mismatch, occurance):
+    score = 0
+    if t1[0] == t2[0]:
+        # match this character
+        matched = t1[0]
+        if mismatch:
+            occurance[0] += 1
+        else:
+            occurance[0] += 2
+        ms, s, o = merge(t1[1:len(t1)], t2[1:len(t2)], False, occurance[1:len(occurance)])
+    else:
+        # this needs to be conformed
+        if arr[len(t1)][len(t2)] is not None:
+            ms, s, o = arr[len(t1)][len(t2)]
+        else:
+            ms1, s1, o1 = merge(t1, t1[0] + t2, True, occurance)
+            ms2, s2, o2 = merge(t2[0] + t1, t2, True, [0] + occurance)
+            if s1 > s2:
+                s = s1
+                ms = ms1
+                o = o1
+            else:
+                s = s2
+                ms = ms2
+                o = o2
+    if arr[len(t1)][len(t2)] is None:
+        arr[len(t1)][len(t2)] = (ms, s, o)
+    matched += ms
+    score += s
+    occurance = occurance[0] + o
+
+    return matched, score, occurance
+
+
 def merge_text(text_array):
-    pass
+    # merge logic is: 
+    # when merging, only add new characters
+    # then, delete occurances that are lower than
+    # certain number
+    result = text_array[0]
+    del result[0]
+    occurance = [1] * len(result)
+    for text in text_array:
+        arr = []
+        result, _, occurance = merge(result, text, False, occurance)
+
+    merged = ""
+    # threashold for determining whether the character is a misread or
+    # actual reading
+    text_threashold = len(result)*1/3
+    for c, n in zip(result, occurance):
+        if n > text_threashold:
+            merged += c
+
+    return merged
 
 # each element in the array in is in the form of
 # represents a frame, each result in the frame is 
@@ -48,7 +107,12 @@ def merge_texts_array(texts, num):
         del text['frame_id']
     return text
 
-    # TODO
+def similarity(t1, t2):
+    t1, (x1, y1) = t1
+    t2, (x2, y2) = t2
+    dis = ((x1 - x2)**2 + (y1 - y2)**2) ** (1/2)
+    text_dis = SequenceMatcher(None, t1, t2).ratio()
+    return dis/4 + text_dis
 
 # file should be a path to a 1s or few seconds long video
 def video_to_text(file, model，lang):
