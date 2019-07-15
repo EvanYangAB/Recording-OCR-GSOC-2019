@@ -1,8 +1,9 @@
-from mrcnn.config import Config
-from mrcnn import utils
-import mrcnn.model as modellib
-from mrcnn import visualize
-from mrcnn.model import log
+# from mrcnn.config import Config
+# from mrcnn import utils
+# import mrcnn.model as modellib
+# from mrcnn import visualize
+# from mrcnn.model import log
+from TextDetect import text_detect
 import numpy as np
 import cv2
 from difflib import SequenceMatcher
@@ -35,8 +36,20 @@ def filter_image(img, mask):
 
 # occurance in the length of t1
 def merge(t1, t2, mismatch, occurance):
+    insert = False
     score = 0
-    if t1[0] == t2[0]:
+    matched = ''
+    if not t1:
+        ms = t2
+        s = len(t2)
+        o = [1] * s
+        occurance = o
+    elif not t2:
+        ms = t1
+        s = len(t1)
+        o = [1] * s
+        occurance = o
+    elif t1[0] == t2[0]:
         # match this character
         matched = t1[0]
         if mismatch:
@@ -44,27 +57,31 @@ def merge(t1, t2, mismatch, occurance):
         else:
             occurance[0] += 2
         ms, s, o = merge(t1[1:len(t1)], t2[1:len(t2)], False, occurance[1:len(occurance)])
+        occurance = [occurance[0]] + o
     else:
         # this needs to be conformed
+        print(t1, t2)
         if arr[len(t1)][len(t2)] is not None:
             ms, s, o = arr[len(t1)][len(t2)]
+            occurance = o
         else:
             ms1, s1, o1 = merge(t1, t1[0] + t2, True, occurance)
             ms2, s2, o2 = merge(t2[0] + t1, t2, True, [0] + occurance)
-            if s1 > s2:
-                s = s1
+            if s1 <= s2:
+                s = s1 + 1
                 ms = ms1
                 o = o1
             else:
-                s = s2
+                s = s2 + 1
                 ms = ms2
                 o = o2
-    if arr[len(t1)][len(t2)] is None:
-        arr[len(t1)][len(t2)] = (ms, s, o)
+                insert = True
+            occurance = o
+
+    if not mismatch and arr[len(t1)][len(t2)] is None:
+        arr[len(t1)][len(t2)] = (ms, s, occurance)
     matched += ms
     score += s
-    occurance = occurance[0] + o
-
     return matched, score, occurance
 
 
@@ -74,10 +91,11 @@ def merge_text(text_array):
     # then, delete occurances that are lower than
     # certain number
     result = text_array[0]
-    del result[0]
+    del text_array[0]
     occurance = [1] * len(result)
     for text in text_array:
-        arr = []
+        global arr
+        arr = [[None] * (len(text) + 1)] * (len(result) + 1)
         result, _, occurance = merge(result, text, False, occurance)
 
     merged = ""
@@ -115,24 +133,30 @@ def similarity(t1, t2):
     return dis/4 + text_dis
 
 # file should be a path to a 1s or few seconds long video
-def video_to_text(file, model，lang):
+def video_to_text(file, model, lang):
     vc = cv2.VideoCapture(file)
     texts = []
     if vc.isOpened():
-        rval , frame = vc.read()
+        success, frame = vc.read()
     else:
+        print('failed')
         # TODO exception
 
     # used this for accessing merged result
     text_id_incre = 0
     # iter all the frames
-    while rval:
+    while success:
         # read one frame
         texts.append([])
         rval, frame = vc.read()
         # grab results from the detection model
-        results = model.detect([frame], verbose=1)
-        r = results[0]
+        # results = model.detect([frame], verbose=1)
+        # r = results[0]
+
+        import scipy.misc
+        scipy.misc.imsave('outfile.jpg', frame)
+        r = text_detect(frame)
+        print(r)
         # iter through each mask for this frame and apply
         # ocr
         identified = -1
@@ -153,11 +177,12 @@ def video_to_text(file, model，lang):
                         identified = text_id
                         break
 
-                if identified = -1:
+                if identified is -1:
                     identified = text_id_incre
                     text_id_incre += 1
 
                 texts[c].append(((text, center), identified))
+                identified = -1
 
         c = c + 1
         cv2.waitKey(1)
