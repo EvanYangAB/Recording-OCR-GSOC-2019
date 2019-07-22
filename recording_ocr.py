@@ -8,6 +8,7 @@ import numpy as np
 import cv2
 from difflib import SequenceMatcher
 from tesseract_wrapper import image_to_string
+import requests 
 
 arr = []
 THREASHOLD = 0.8
@@ -149,14 +150,21 @@ def video_to_text(file, model, lang):
         # read one frame
         texts.append([])
         rval, frame = vc.read()
+
         # grab results from the detection model
         # results = model.detect([frame], verbose=1)
         # r = results[0]
 
+
+
         import scipy.misc
         scipy.misc.imsave('outfile.jpg', frame)
-        r = text_detect(frame)
-        print(r)
+        # r = text_detect(frame)
+        files = {'media': open('outfile.jpg', 'rb')}
+        r = requests.get(url, files=files)
+        r = r.json()
+
+
         # iter through each mask for this frame and apply
         # ocr
         identified = -1
