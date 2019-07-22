@@ -161,7 +161,7 @@ def video_to_text(file, model, lang):
         scipy.misc.imsave('outfile.jpg', frame)
         # r = text_detect(frame)
         files = {'media': open('outfile.jpg', 'rb')}
-        r = requests.get(url, files=files)
+        r = requests.get("http://localhost:8769", files=files)
         r = r.json()
 
 
