@@ -57,32 +57,6 @@ def get_predictor(checkpoint_path):
     saver.restore(sess, model_path)
 
     def predictor(img):
-        """
-        :return: {
-            'text_lines': [
-                {
-                    'score': ,
-                    'x0': ,
-                    'y0': ,
-                    'x1': ,
-                    ...
-                    'y3': ,
-                }
-            ],
-            'rtparams': {  # runtime parameters
-                'image_size': ,
-                'working_size': ,
-            },
-            'timing': {
-                'net': ,
-                'restore': ,
-                'nms': ,
-                'cpuinfo': ,
-                'meminfo': ,
-                'uptime': ,
-            }
-        }
-        """
         start_time = time.time()
         rtparams = collections.OrderedDict()
         rtparams['start_time'] = datetime.datetime.now().isoformat()
