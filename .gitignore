@@ -10,3 +10,6 @@ __pycache__
 logs
 text-detection
 *.jpg
+*.mp4
+result
+EAST_ICPR/models/east_icpr2018_resnet_v1_50_rbox_1035k/*.*

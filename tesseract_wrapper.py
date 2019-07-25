@@ -9,5 +9,5 @@ def image_to_string(image_array, lang):
 
 
 def file_to_string(file_path, lang):
-	image = cv2.imread(path)
+	image = cv2.imread(file_path)
 	return image_to_string(image, lang)

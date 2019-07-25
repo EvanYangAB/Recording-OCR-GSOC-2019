@@ -1,3 +1,5 @@
-from recording_ocr import video_to_text
+from recording_ocr import *
 
-video_to_text('text.mp4', None, 'ENG')
+a = video_to_text('text.mp4', None, 'ENG')
+
+print(a)
